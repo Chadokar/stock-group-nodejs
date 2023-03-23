@@ -1,6 +1,6 @@
 const GroupManager = (state, action) => {
   switch (action.type) {
-    case "GROUPNAVIGATOR":
+    case "GROUP":
       const { token, groupIds } = action.payload;
       const data = groupIds.filter(async (groupId) => {
         try {
@@ -15,10 +15,11 @@ const GroupManager = (state, action) => {
           return data;
         } catch (err) {
           console.log(err);
-          setError(err);
         }
       });
-      console.log("data : ", data);
-      return data;
+
+      return { ...state, data: data };
+    case "GROUPNAVIGATOR":
+      const a = 0;
   }
 };
