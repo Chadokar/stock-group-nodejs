@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
   },
   firstname: { type: String },
   lastname: { type: String },
+  groupIds: [{ type: mongoose.Schema.Types.ObjectId, ref: "group" }],
 });
 
 // fire a function before doc saved to db

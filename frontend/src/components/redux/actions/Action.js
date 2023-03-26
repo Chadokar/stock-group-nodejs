@@ -1,9 +1,26 @@
-export const GroupNavigater = (data, token) => {
+export const Groups = (groupIds) => {
   return {
     type: "GROUP",
     payload: {
-      data: data,
-      token: token,
+      groupIds: groupIds,
+    },
+  };
+};
+
+export const groupsNavigator = (groupId) => {
+  return {
+    type: "GROUP_NAVIGATOR",
+    payload: {
+      groupId: groupId,
+    },
+  };
+};
+
+export const createGroup = (groupName) => {
+  return {
+    type: "CREATE_GROUP",
+    payload: {
+      groupName: groupName,
     },
   };
 };

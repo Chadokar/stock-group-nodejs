@@ -2,6 +2,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./profile.css";
 import { Dialog } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { Groups } from "../redux/actions/Action";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
   useEffect(() => {
@@ -31,6 +34,9 @@ function Profile() {
     JSON.parse(localStorage.getItem("userToken"))
   );
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const submithandler = async (e) => {
     e.preventDefault();
     try {
@@ -54,11 +60,8 @@ function Profile() {
       console.log(data.email);
     } catch (err) {
       console.log(err);
-      setError(err);
     }
   };
-
-  console.log(userInfo.email);
 
   return (
     <>
@@ -74,6 +77,15 @@ function Profile() {
             <h3>{userInfo.email}</h3>
             <h2 className="name">Shubham Chadokar</h2>
             <p className="sort-des">This is a sort description</p>
+            <button
+              className="btn"
+              onClick={() => {
+                dispatch(Groups(userInfo.groupIds));
+                navigate("/group");
+              }}
+            >
+              Group
+            </button>
           </div>
           <h4 onClick={() => setDialog(true)} className="profile-edit btn">
             Edit
@@ -116,7 +128,7 @@ function Profile() {
               required
             />
             <div className="password error"></div>
-            <button>Save</button>
+            <button onClick={() => setDialog(false)}>Save</button>
           </form>
         </Dialog>
       </>

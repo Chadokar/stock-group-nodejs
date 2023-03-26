@@ -1,13 +1,18 @@
 const Group = require("../models/GroupchatModel");
-const message = require("../models/MessageModel");
+const User = require("../models/User");
 
 module.exports.group_post = async (req, res) => {
-  const { groupDetails } = req.body;
+  const { groupDetails, userid } = req.body;
   const message = [];
   try {
-    const group = await Group.create({ groupDetails, message });
-    console.log(group);
-    res.status(201).json(group);
+    const group = await Group.create({ groupDetails });
+    let user = await User.findById(userid);
+    await User.findByIdAndUpdate(userid, {
+      groupIds: [...user.groupIds, group._id],
+    });
+    user = await User.findById(userid);
+    console.log("group: ", group, "user: ", user);
+    res.status(201).json({ group, user });
   } catch (err) {
     res.status(400).json(err);
   }
@@ -31,9 +36,10 @@ module.exports.message_post = async (req, res) => {
     } else if (!messages.length) {
       throw Error("No message given");
     }
-    const group = await Group.findByIdAndUpdate(groupId, { messages });
+    await Group.findByIdAndUpdate(groupId, { messages });
+    const group = await Group.findById(groupId);
     console.log("group: ", group);
-    res.status(201).json({ ...group });
+    res.status(201).json(group);
   } catch (err) {
     res.status(400).json(err);
   }

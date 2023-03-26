@@ -1,6 +1,8 @@
 import { Dialog } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Groups } from "../redux/actions/Action";
 import "./groupchat.css";
 
 function Groupchat() {
@@ -13,6 +15,15 @@ function Groupchat() {
     JSON.parse(localStorage.getItem("userInfo"))
   );
 
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(Groups(userInfo.groupIds));
+    console.log("hi");
+  }, []);
+
+  let data = useSelector((state) => console.log(state.GroupManager));
+
+  console.log({ ...data });
   const submithandler = async (e) => {
     e.preventDefault();
     try {
@@ -29,7 +40,7 @@ function Groupchat() {
             groupAdmin: userInfo._id,
             groupMembers: [userInfo._id],
           },
-          latestMessage: [Math.random().toString],
+          userid: userInfo._id,
         },
         config
       );
@@ -50,7 +61,7 @@ function Groupchat() {
       const { data } = await axios.post(
         "/g/message",
         {
-          groupId: "641b514be67237e368ef6570",
+          groupId: "641cabfb24724e1923f28b93",
           messages: [
             {
               text,

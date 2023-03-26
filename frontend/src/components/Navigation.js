@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import Profile from "./afterauth/Profile";
 import Smoothies from "./afterauth/Smoothies";
@@ -7,9 +8,14 @@ import Signup from "./auth/Signup";
 import Groupchat from "./groupchat/Groupchat";
 import Home from "./home/Home";
 import Header from "./partials/Header";
+import { Groups } from "./redux/actions/Action";
 import Stocks from "./Stocks/Stocks";
 
 function Navigation() {
+  const [userInfo, setUserInfo] = useState(
+    JSON.parse(localStorage.getItem("userInfo"))
+  );
+
   return (
     <Routes>
       <Route path="/" element={<Header />}>
