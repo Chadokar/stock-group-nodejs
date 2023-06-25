@@ -3,7 +3,6 @@ const User = require("../models/User");
 
 module.exports.group_post = async (req, res) => {
   const { groupDetails, userid } = req.body;
-  const message = [];
   try {
     const group = await Group.create({ groupDetails });
     let user = await User.findById(userid);
@@ -11,7 +10,7 @@ module.exports.group_post = async (req, res) => {
       groupIds: [...user.groupIds, group._id],
     });
     user = await User.findById(userid);
-    console.log("group: ", group, "user: ", user);
+    // console.log("group: ", group, "user: ", user);
     res.status(201).json({ group, user });
   } catch (err) {
     res.status(400).json(err);

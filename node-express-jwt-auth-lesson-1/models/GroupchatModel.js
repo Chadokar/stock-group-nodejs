@@ -22,6 +22,11 @@ const groupSchema = new mongoose.Schema(
       groupName: { type: String, default: "GroupName" },
       groupMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
       groupAdmin: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      groupImage: {
+        type: String,
+        default:
+          "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+      },
     },
     messages: [
       {

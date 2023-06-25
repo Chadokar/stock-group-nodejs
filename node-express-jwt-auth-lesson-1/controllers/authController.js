@@ -35,10 +35,12 @@ const handleError = (err) => {
 
 const maxAge = 3 * 24 * 60 * 60;
 
-const createToken = (id) => {
-  return jwt.sign({ id }, "chadokar", {
-    expiresIn: maxAge,
+const createTokens = (user) => {
+  const accessToken = jwt.sign({ id: user._id }, "chadokar", {
+    expiresIn: "1h",
   });
+
+  return accessToken;
 };
 
 // module.exports.signup_get = (req, res) => {
@@ -53,7 +55,7 @@ module.exports.signup_post = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.create({ email, password });
-    const token = createToken(user._id);
+    const token = createTokens(user);
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
     res.status(201).json({ user: user._id });
   } catch (err) {
@@ -67,8 +69,7 @@ module.exports.login_post = async (req, res) => {
 
   try {
     const user = await User.login(email, password);
-    const token = createToken(user._id);
-    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+    const token = createTokens(user);
     res.status(200).json({ user: user, token });
   } catch (err) {
     const errors = handleError(err);
@@ -102,9 +103,7 @@ module.exports.update_user_put = async (req, res) => {
 };
 
 module.exports.get_details = async (req, res) => {
-  console.log(req.params);
-  const id = req.params.userid;
-  console.log(id);
+  const id = req.id;
   try {
     const user = await User.findById(id);
     res.status(201).json(user);
@@ -113,7 +112,7 @@ module.exports.get_details = async (req, res) => {
   }
 };
 
-var request = require("request");
+const request = require("request");
 
 // replace the "demo" apikey below with your own key from https://www.alphavantage.co/support/#api-key
 var url =
@@ -146,3 +145,20 @@ module.exports.get_data = async (req, res) => {
     res.json(err);
   }
 };
+
+// module.exports.verifyToken = (req, res, next) => {
+//   const token = req.cookies.jwt;
+
+//   if (token) {
+//     verifyToken(token)
+//       .then((userId) => {
+//         req.userId = userId; // Store the extracted user ID in the request object
+//         next();
+//       })
+//       .catch((err) => {
+//         res.status(401).json({ message: "Invalid token" });
+//       });
+//   } else {
+//     res.status(401).json({ message: "No token provided" });
+//   }
+// };

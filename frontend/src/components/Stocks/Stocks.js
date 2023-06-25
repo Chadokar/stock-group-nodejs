@@ -2,8 +2,11 @@ import axios from "axios";
 import React from "react";
 
 import "./stock.css";
+import { redirect } from "react-router-dom";
 
 function Stocks() {
+  const token = localStorage.getItem("userToken");
+  if (!token) return redirect("/login");
   const stock = async (e) => {
     e.preventDefault();
     const symbol = "TCS";

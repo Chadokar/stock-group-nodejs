@@ -24,13 +24,16 @@ app.set("view engine", "ejs");
 
 // database connection
 const url = "mongodb://localhost:27017/jwt-practice";
+let server;
 
 mongoose
   .connect(url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then((result) => app.listen(port, () => console.log("server started")))
+  .then(
+    (result) => (server = app.listen(port, () => console.log("server started")))
+  )
   .catch((err) => console.log(err));
 
 // routes
@@ -39,3 +42,5 @@ app.get("/", (req, res) => res.render("home"));
 app.get("/smoothies", requireAuth, (req, res) => res.render("smoothies"));
 app.use(authRoutes);
 app.use("/g", groupRoutes);
+
+module.exports = app;

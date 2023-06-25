@@ -22,14 +22,15 @@ const requireAuth = (req, res, next) => {
 // const a = 0;
 // check current user
 const checkUser = (req, res, next) => {
-  token = req.headers.authorization.split(" ")[1];
+  const token = req.headers.authorization.split(" ")[1];
+  console.log(token);
   if (token) {
     jwt.verify(token, "chadokar", async (err, decodedToken) => {
       if (err) {
         console.log(err.message);
         res.status(401).json(err);
       } else {
-        console.log(decodedToken);
+        console.log("decodedToken: ", decodedToken);
         let user = await User.findById(decodedToken.id);
         res.locals.user = user;
         next();
@@ -41,4 +42,21 @@ const checkUser = (req, res, next) => {
   }
 };
 
-module.exports = { requireAuth, checkUser };
+const verifyToken = (req, res, next) => {
+  const token = JSON.parse(req.headers.authorization);
+  if (!token) {
+    res.send("We need a token, please give it to us next time");
+  } else {
+    try {
+      const decoded = jwt.verify(token, "chadokar");
+      req.id = decoded.id;
+      next();
+    } catch (err) {
+      res.status(401).json({
+        message: err,
+      });
+    }
+  }
+};
+
+module.exports = { requireAuth, checkUser, verifyToken };

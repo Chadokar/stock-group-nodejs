@@ -1,6 +1,9 @@
 import React from "react";
+import { redirect } from "react-router-dom";
 
 function Smoothies() {
+  const token = localStorage.getItem("userToken");
+  if (!token) return redirect("/login");
   return (
     <div>
       <ul className="recipes">

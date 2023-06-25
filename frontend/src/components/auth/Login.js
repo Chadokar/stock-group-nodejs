@@ -8,7 +8,21 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState();
   const navigate = useNavigate();
-  const maxAge = 3 * 24 * 60 * 60;
+  async function fetchData() {
+    const token = localStorage.getItem("userToken");
+    if (localStorage.getItem("userToken")) {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          authorization: token,
+        },
+      };
+      await axios
+        .get(`/profile/${token}`, config)
+        .then(({ data }) => console.log("data: ", data))
+        .catch((err) => console.log(err));
+    }
+  }
 
   const submithandler = async (e) => {
     e.preventDefault();
@@ -27,7 +41,7 @@ function Login() {
         config
       );
       localStorage.setItem("userToken", JSON.stringify(data.token));
-      localStorage.setItem("userInfo", JSON.stringify(data.user));
+      fetchData();
       navigate("/smoothies");
     } catch (err) {
       console.log(err);

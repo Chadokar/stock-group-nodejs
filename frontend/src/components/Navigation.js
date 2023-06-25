@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Profile from "./afterauth/Profile";
 import Smoothies from "./afterauth/Smoothies";
 import Login from "./auth/Login";
@@ -10,22 +10,34 @@ import Home from "./home/Home";
 import Header from "./partials/Header";
 import { Groups } from "./redux/actions/Action";
 import Stocks from "./Stocks/Stocks";
+import axios from "axios";
 
 function Navigation() {
-  const [userInfo, setUserInfo] = useState(
-    JSON.parse(localStorage.getItem("userInfo"))
-  );
+  const token = localStorage.getItem("userToken");
+  const navigate = useNavigate();
+  const [datas, setDatas] = useState();
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login"); // Redirect to login page if token doesn't exist
+    } else {
+    }
+  }, []);
 
   return (
     <Routes>
       <Route path="/" element={<Header />}>
-        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/smoothies" element={<Smoothies />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/stock" element={<Stocks />} />
-        <Route path="/group" element={<Groupchat />} />
+        <Route path="/" element={<Home />} />
+        {token && (
+          <>
+            <Route path="/smoothies" element={<Smoothies />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/stock" element={<Stocks />} />
+            <Route path="/group" element={<Groupchat />} />
+          </>
+        )}
       </Route>
     </Routes>
   );
