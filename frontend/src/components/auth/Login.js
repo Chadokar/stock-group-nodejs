@@ -18,7 +18,7 @@ function Login() {
         },
       };
       await axios
-        .get(`/profile/${token}`, config)
+        .get(`/profile`, config)
         .then(({ data }) => console.log("data: ", data))
         .catch((err) => console.log(err));
     }
