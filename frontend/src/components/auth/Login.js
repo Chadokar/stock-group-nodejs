@@ -26,6 +26,7 @@ function Login() {
         config
       );
       localStorage.setItem("userToken", JSON.stringify(data.token));
+      localStorage.setItem("userInfo", JSON.stringify(data.user));
       navigate("/smoothies");
       document.location.reload();
     } catch (err) {

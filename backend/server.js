@@ -72,7 +72,8 @@ io.on("connection", (socket) => {
 
   socket.on("chatroomMessage", async ({ groupId, message }) => {
     if (message.trim().length > 0) {
-      const user = await User.findOne({ _id: socket.userId });
+      const user = await User.findById(socket.userId);
+      console.log("User: " + user);
       const newMessage = new Message({
         chatroom: groupId,
         senderId: socket.userId,
@@ -80,7 +81,7 @@ io.on("connection", (socket) => {
       });
       io.to(groupId).emit("newMessage", {
         message,
-        name: user.name,
+        user,
         userId: socket.userId,
       });
       await newMessage.save();

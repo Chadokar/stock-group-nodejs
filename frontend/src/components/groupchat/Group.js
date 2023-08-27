@@ -9,33 +9,7 @@ function Group({ setDialog, socket }) {
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [userId, setUserId] = React.useState("");
 
-  const sendMessage = () => {
-    if (socket) {
-      socket.emit("chatroomMessage", {
-        groupId,
-        message: messageRef.current.value,
-      });
-
-      messageRef.current.value = "";
-    }
-  };
-
   useEffect(() => {
-    if (userInfo) {
-      const id = userInfo._id;
-      console.log(id);
-      setUserId(id);
-    }
-    if (socket) {
-      socket.on("newMessage", (message) => {
-        const newMessage = [...messages, message];
-        setMessages(newMessage);
-      });
-    }
-  });
-
-  React.useEffect(() => {
-    console.log(socket);
     if (socket) {
       console.log(socket);
       setTimeout(async () => {
@@ -54,8 +28,38 @@ function Group({ setDialog, socket }) {
         });
       }
     };
-    //eslint-disable-next-line
-  }, []);
+  }, [socket, groupId]);
+
+  const sendMessage = () => {
+    if (socket) {
+      socket.emit("chatroomMessage", {
+        groupId,
+        message: messageRef.current.value,
+      });
+
+      messageRef.current.value = "";
+    }
+  };
+
+  useEffect(() => {
+    if (userInfo) {
+      const id = userInfo._id;
+      console.log(id);
+      setUserId(id);
+    }
+    if (socket) {
+      setTimeout(
+        () =>
+          socket.on("newMessage", (message) => {
+            const newMessage = [...messages, message];
+            setMessages(newMessage);
+            console.log(newMessage);
+            console.log(userId);
+          }),
+        300
+      );
+    }
+  });
 
   return (
     <>
@@ -67,7 +71,10 @@ function Group({ setDialog, socket }) {
         <div className="chatbox-container-scroll">
           <div className="chatbox-container">
             {messages.map((message, i) => (
-              <div key={message._id} className="chatbox">
+              <div
+                key={i}
+                className={`chatbox ${message.user._id === userId && "me"}`}
+              >
                 <img
                   className="chat-profile-img"
                   src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
@@ -75,7 +82,7 @@ function Group({ setDialog, socket }) {
                 />
                 <div className="textpart">
                   <div className="self-details-chat">
-                    <h3 className="chat-name">{message._id}</h3>
+                    <h3 className="chat-name">{message.user.firstname}</h3>
                     <p className="date-time">10 20-03-22</p>
                   </div>
                   <div className="text-box">

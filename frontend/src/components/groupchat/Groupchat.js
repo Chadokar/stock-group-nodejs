@@ -9,6 +9,7 @@ import Group from "./Group";
 function Groupchat({ socket }) {
   const [groupName, setGroupName] = useState("");
   const [dialog, setDialog] = useState(false);
+  const [currSocket, setCurrentSocket] = useState(socket);
   const [userInfo, setUserInfo] = useState(
     JSON.parse(localStorage.getItem("userInfo"))
   );
@@ -22,6 +23,10 @@ function Groupchat({ socket }) {
   //   dispatch(Groups(userInfo.groupIds));
   //   console.log("hi");
   // }, []);
+
+  useEffect(() => {
+    setCurrentSocket(socket);
+  }, [socket]);
 
   const [base64, setBase64] = useState();
 
@@ -140,7 +145,7 @@ function Groupchat({ socket }) {
             <h1>Group 1</h1>
           </div>
         </div>
-        <Group setDialog={setDialog} socket={socket} />
+        <Group setDialog={setDialog} socket={currSocket} />
       </div>
     </>
   );

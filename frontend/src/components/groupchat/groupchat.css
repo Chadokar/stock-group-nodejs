@@ -96,8 +96,9 @@
   background: rgba(212, 211, 211, 0.171);
 }
 
-.chatbox:hover {
-  background: rgba(212, 211, 211, 0.897);
+.chatbox.me {
+  background: rgba(212, 211, 211, 0.973);
+  margin-left: 40px;
 }
 
 .textpart {
