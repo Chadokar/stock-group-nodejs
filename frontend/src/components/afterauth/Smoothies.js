@@ -1,9 +1,10 @@
 import React from "react";
-import { redirect } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 
 function Smoothies() {
   const token = localStorage.getItem("userToken");
-  if (!token) return redirect("/login");
+  const navigate = useNavigate();
+  if (!token) navigate("login");
   return (
     <div>
       <ul className="recipes">

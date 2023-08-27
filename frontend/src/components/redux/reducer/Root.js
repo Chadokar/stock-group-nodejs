@@ -1,8 +1,10 @@
 import GroupManager from "./GroupReducers";
 import { combineReducers } from "redux";
+import UserReducers from "./UserReducers";
 
 const rootReducer = combineReducers({
-  GroupManager: GroupManager,
+  GroupManager,
+  UserReducers,
 });
 
 export default rootReducer;

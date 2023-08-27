@@ -8,21 +8,6 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState();
   const navigate = useNavigate();
-  async function fetchData() {
-    const token = localStorage.getItem("userToken");
-    if (localStorage.getItem("userToken")) {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          authorization: token,
-        },
-      };
-      await axios
-        .get(`/profile`, config)
-        .then(({ data }) => console.log("data: ", data))
-        .catch((err) => console.log(err));
-    }
-  }
 
   const submithandler = async (e) => {
     e.preventDefault();
@@ -41,8 +26,8 @@ function Login() {
         config
       );
       localStorage.setItem("userToken", JSON.stringify(data.token));
-      fetchData();
       navigate("/smoothies");
+      document.location.reload();
     } catch (err) {
       console.log(err);
       setError(err);
@@ -71,7 +56,7 @@ function Login() {
           required
         />
         <div className="password error"></div>
-        <button>Log up</button>
+        <button>Log In</button>
       </form>
     </div>
   );

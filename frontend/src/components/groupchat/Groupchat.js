@@ -5,10 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Groups } from "../redux/actions/Action";
 import "./groupchat.css";
 import Group from "./Group";
-import io from "socket.io-client";
 
-function Groupchat() {
-  const [socket, setSocket] = useState(null);
+function Groupchat({ socket }) {
   const [groupName, setGroupName] = useState("");
   const [dialog, setDialog] = useState(false);
   const [userInfo, setUserInfo] = useState(
@@ -27,29 +25,6 @@ function Groupchat() {
 
   const [base64, setBase64] = useState();
 
-  const setupSocket = () => {
-    const token = localStorage.getItem("userToken");
-    if (token && !socket) {
-      const newSocket = io("http://localhost:8000", {
-        query: {
-          token: token,
-        },
-      });
-      newSocket.on("disconnect", () => {
-        setSocket(null);
-        setTimeout(setupSocket, 3000);
-      });
-      newSocket.on("connect", () => {
-        console.log("socket connected");
-      });
-
-      setSocket(newSocket);
-    }
-  };
-
-  // let data = useSelector((state) => console.log(state.GroupManager));
-
-  // console.log({ ...data });
   const submithandler = async (e) => {
     e.preventDefault();
     try {
@@ -162,7 +137,7 @@ function Groupchat() {
               src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
               alt=""
             />
-            <h3>Group 1</h3>
+            <h1>Group 1</h1>
           </div>
         </div>
         <Group setDialog={setDialog} socket={socket} />

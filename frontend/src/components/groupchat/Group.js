@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
-function Group(props) {
-  const { setDialog, socket } = props;
-  const groupId = "644e05cb5c2b44020163ea54";
-  const [text, setText] = useState("");
+function Group({ setDialog, socket }) {
+  const groupId = "64ea585e0e4177eef675d72a";
   const [messages, setMessages] = useState([]);
   const [isLiked, setIsliked] = useState(false);
   const [likes, setlikes] = useState();
@@ -25,6 +23,7 @@ function Group(props) {
   useEffect(() => {
     if (userInfo) {
       const id = userInfo._id;
+      console.log(id);
       setUserId(id);
     }
     if (socket) {
@@ -33,14 +32,18 @@ function Group(props) {
         setMessages(newMessage);
       });
     }
-    //eslint-disable-next-line
   });
 
   React.useEffect(() => {
+    console.log(socket);
     if (socket) {
-      socket.emit("joinRoom", {
-        groupId,
-      });
+      console.log(socket);
+      setTimeout(async () => {
+        await socket.emit("joinRoom", {
+          groupId,
+        });
+        console.log("Joined room");
+      }, 300);
     }
 
     return () => {

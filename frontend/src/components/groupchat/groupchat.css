@@ -74,6 +74,7 @@
 ::-webkit-scrollbar-thumb {
   background-color: rebeccapurple;
   border-radius: 3px;
+  margin: 0 4px;
 }
 
 ::-webkit-scrollbar-track {

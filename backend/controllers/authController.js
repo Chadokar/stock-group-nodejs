@@ -37,7 +37,7 @@ const maxAge = 3 * 24 * 60 * 60;
 
 const createTokens = (user) => {
   const accessToken = jwt.sign({ id: user._id }, "chadokar", {
-    expiresIn: "1h",
+    expiresIn: "1000h",
   });
 
   return accessToken;
@@ -83,9 +83,8 @@ module.exports.logout_get = (req, res) => {
 };
 
 module.exports.update_user_put = async (req, res) => {
-  console.log(req.body);
   const { firstname, lastname, email } = req.body;
-  const userid = req.params.userid;
+  const userid = req.id;
   try {
     const user = await User.findByIdAndUpdate(userid, {
       firstname: firstname,
@@ -95,7 +94,7 @@ module.exports.update_user_put = async (req, res) => {
     if (!user) {
       throw Error("User not found");
     }
-    const userInfo = await User.findById(req.params.userid);
+    const userInfo = await User.findById(userid);
     res.status(200).json(userInfo);
   } catch (err) {
     res.status(400).json({ errors: err });

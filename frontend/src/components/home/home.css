@@ -62,6 +62,7 @@ a {
 .btn {
   border-radius: 36px;
   background: #fee996;
+  margin: 0;
 }
 .form h2 {
   font-size: 2.4em;

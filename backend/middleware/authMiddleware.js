@@ -43,7 +43,9 @@ const checkUser = (req, res, next) => {
 };
 
 const verifyToken = (req, res, next) => {
-  const token = JSON.parse(req.headers.authorization);
+  let token = req.headers.authorization.split(" ")[1];
+  token = token.substring(1, token.length - 1);
+
   if (!token) {
     res.send("We need a token, please give it to us next time");
   } else {
@@ -52,6 +54,7 @@ const verifyToken = (req, res, next) => {
       req.id = decoded.id;
       next();
     } catch (err) {
+      console.log(err);
       res.status(401).json({
         message: err,
       });

@@ -24,3 +24,10 @@ export const createGroup = (groupName) => {
     },
   };
 };
+
+export const setData = (data) => {
+  return {
+    type: "DATA",
+    payload: { data: data },
+  };
+};
