@@ -14,9 +14,11 @@ import axios from "axios";
 import { debounce } from "./utility/debounce";
 import RequireAuth from "./hooks/useAuth";
 import { io } from "socket.io-client";
+import { fetchUserData } from "./apicall/userData";
 
 function Navigation() {
   const [socket, setSocket] = useState(null);
+  const dispatch = useDispatch();
   // useEffect(() => {
   //   if (!token) {
   //     console.log(pathname);
@@ -52,8 +54,11 @@ function Navigation() {
     }
   };
 
-  console.log(socket);
+  // console.log(socket);
 
+  useEffect(() => {
+    fetchUserData(dispatch);
+  }, []);
   React.useEffect(() => {
     setupSocket();
     //eslint-disable-next-line
@@ -111,6 +116,15 @@ function Navigation() {
       element: (
         <Suspense fallback={<h1>Loading</h1>}>
           <Groupchat socket={socket} />
+        </Suspense>
+      ),
+      protected: true,
+    },
+    {
+      path: "/stocks",
+      element: (
+        <Suspense fallback={<h1>Loading</h1>}>
+          <Stocks socket={socket} />
         </Suspense>
       ),
       protected: true,
