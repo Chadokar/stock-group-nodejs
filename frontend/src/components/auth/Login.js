@@ -2,12 +2,15 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { fetchUserData } from "../apicall/userData";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const submithandler = async (e) => {
     e.preventDefault();
@@ -26,7 +29,7 @@ function Login() {
         config
       );
       localStorage.setItem("userToken", JSON.stringify(data.token));
-      localStorage.setItem("userInfo", JSON.stringify(data.user));
+      fetchUserData(dispatch);
       navigate("/smoothies");
       document.location.reload();
     } catch (err) {
