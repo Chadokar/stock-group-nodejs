@@ -20,7 +20,12 @@ const groupSchema = new mongoose.Schema(
   {
     groupDetails: {
       groupName: { type: String, default: "GroupName" },
-      groupMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+      groupMembers: [
+        {
+          memberId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+          memberName: { type: String },
+        },
+      ],
       groupAdmin: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
       groupImage: {
         type: String,
