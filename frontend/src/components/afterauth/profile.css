@@ -35,3 +35,9 @@
   padding: 10px 20px;
   cursor: pointer;
 }
+
+.group-btns {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+}

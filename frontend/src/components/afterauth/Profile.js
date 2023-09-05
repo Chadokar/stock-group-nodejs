@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Groups, setData } from "../redux/actions/Action";
 import { useNavigate } from "react-router-dom";
 import { fetchUserData } from "../apicall/userData";
+import { handleImage } from "../utility/handleImage";
 
 function Profile() {
   const [email, setEmail] = useState("");
@@ -13,15 +14,17 @@ function Profile() {
   const [firstname, setFirstname] = useState("");
   const [error, setError] = useState();
   const [dialog, setDialog] = useState(false);
+  const [dialogGroup, setDialogGroup] = useState(false);
+  const [base64, setBase64] = useState();
+  const [groupName, setGroupName] = useState("");
+  const [image, setImage] = useState(
+    "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
+  );
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchUserData(dispatch);
-  }, []);
-
-  const data = useSelector((state) => state.UserReducers);
+  const userInfo = useSelector((state) => state.UserReducers);
 
   const submithandler = async (e) => {
     e.preventDefault();
@@ -42,8 +45,36 @@ function Profile() {
         },
         config
       );
-      localStorage.setItem("userInfo", JSON.stringify(data));
       dispatch(setData(data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const newGroupHandler = async (e) => {
+    console.log(userInfo);
+    e.preventDefault();
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+      const { data } = await axios.post(
+        "/g/group",
+        {
+          groupDetails: {
+            groupName,
+            groupAdmin: userInfo._id,
+            groupImage: base64,
+          },
+          userId: userInfo._id,
+        },
+        config
+      );
+      console.log(data);
+      dispatch(setData(data?.user));
+      setDialogGroup(false);
     } catch (err) {
       console.log(err);
     }
@@ -60,18 +91,30 @@ function Profile() {
             />
           </div>
           <div className="self-details">
-            <h3>{data?.email}</h3>
-            <h2 className="name">{data?.firstname + " " + data?.lastname}</h2>
+            <h3>{userInfo?.email}</h3>
+            <h2 className="name">
+              {userInfo?.firstname + " " + userInfo?.lastname}
+            </h2>
             <p className="sort-des">This is a sort description</p>
-            <button
-              className="btn"
-              onClick={() => {
-                // dispatch(Groups(userInfo.groupIds));
-                navigate("/group");
-              }}
-            >
-              Group
-            </button>
+            <div className="group-btns">
+              <button
+                className="btn"
+                onClick={() => {
+                  // dispatch(Groups(userInfo.groupIds));
+                  navigate("/group");
+                }}
+              >
+                Group
+              </button>
+              <button
+                className="btn"
+                onClick={() => {
+                  setDialogGroup(true);
+                }}
+              >
+                Create Group
+              </button>
+            </div>
           </div>
           <h4 onClick={() => setDialog(true)} className="profile-edit btn">
             Edit
@@ -79,6 +122,37 @@ function Profile() {
         </div>
       </section>
       <>
+        <Dialog
+          fullWidth={false}
+          maxWidth="xl"
+          open={dialogGroup}
+          onClose={() => setDialogGroup(false)}
+        >
+          <form
+            className="form"
+            onSubmit={groupName && newGroupHandler}
+            action=""
+          >
+            <h2>Create Group</h2>
+            <label htmlFor="groupName">Group Name</label>
+            <input
+              type="groupName"
+              name=""
+              value={groupName}
+              onChange={(e) => setGroupName(e.target.value)}
+            />
+            <div className="email error"></div>
+            <label htmlFor="groupImage">Group Image</label>
+            <input
+              type="file"
+              name=""
+              id="groupImage"
+              accept="image/*"
+              onChange={(e) => handleImage(e, setImage, setBase64)}
+            />
+            <button>Create group</button>
+          </form>
+        </Dialog>
         <Dialog
           fullWidth={false}
           maxWidth="xl"
