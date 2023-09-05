@@ -81,7 +81,7 @@ io.on("connection", (socket) => {
       });
       io.to(groupId).emit("newMessage", {
         message,
-        user,
+        userName: user.firstname + " " + user.lastname,
         userId: socket.userId,
       });
       await newMessage.save();
