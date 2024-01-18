@@ -3,6 +3,7 @@ import React from "react";
 
 import "./stock.css";
 import { redirect } from "react-router-dom";
+import LineGraph from "../graphs/LineGraph";
 
 function Stocks() {
   const token = localStorage.getItem("userToken");
@@ -11,10 +12,14 @@ function Stocks() {
     e.preventDefault();
     const symbol = "TCS";
     const apiKey = "E3T2L10PTU6WK0SE";
-    axios.get`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`() // PROVIDE THE SINGLE DATA OF LAST DAY
+    // axios.get //`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}` // PROVIDE THE SINGLE DATA OF LAST DAY
     // `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&interval=60min&symbol=${symbol}&apikey=${apiKey}`
     // "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=demo"
     // "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=demo"
+    axios
+      .get(
+        `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`
+      )
       .then((response) => {
         // const data = response.data["Global Quote"];
         const res = response.data;
@@ -34,6 +39,7 @@ function Stocks() {
   return (
     <div className="stock">
       <button onClick={stock}>Click</button>
+      <LineGraph />
     </div>
   );
 }

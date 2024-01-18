@@ -3,4 +3,5 @@
   align-items: center;
   justify-content: center;
   padding: 100px;
+  flex-direction: column;
 }
